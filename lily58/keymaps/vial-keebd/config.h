@@ -45,3 +45,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define TAPPING_FORCE_HOLD
 #define TAPPING_TERM 100
+
+/* Rotary encoders (Lily58 RE) — one per half on Pro Micro pins F4/F5.
+ * The converter maps these to the physical RP2040 pins for helios/svlinky.
+ * Harmless on a normal Lily58: F4/F5 are outside the key matrix. Actual
+ * encoder actions are set in the Vial app (encoder_map holds KC_TRNS). */
+#define ENCODERS_PAD_A { F4 }
+#define ENCODERS_PAD_B { F5 }
+#define ENCODER_RESOLUTION 4

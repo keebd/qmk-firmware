@@ -25,6 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define QUICK_TAP_TERM 0
 #define TAPPING_TERM 100
 
+// Rotary encoders (Lily58 RE) — one per half on Pro Micro pins F4/F5.
+// QMK's converter maps these to the physical RP2040 pins for the helios/svlinky
+// controllers. Harmless on a normal (all-switch) Lily58: F4/F5 are outside the
+// key matrix, so the pins simply idle.
+#define ENCODERS_PAD_A { F4 }
+#define ENCODERS_PAD_B { F5 }
+#define ENCODER_RESOLUTION 4
+
 // Underglow
 /*
 #undef RGBLIGHT_LED_COUNT
