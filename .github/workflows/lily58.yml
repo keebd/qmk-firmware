@@ -12,7 +12,6 @@ on:
 jobs:
   lily58-default-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,16 +19,15 @@ jobs:
           keyboard: lily58
           keymap: default
           controller: helios
-          output-dir: lily58
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: lily58
-          dst: ./
-          storage-branch: main
+          name: lily58-default-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   lily58-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -37,17 +35,16 @@ jobs:
           keyboard: lily58
           keymap: via
           controller: helios
-          output-dir: lily58
+          output-dir: build-output
           local-keymap-path: lily58/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: lily58
-          dst: ./
-          storage-branch: main
+          name: lily58-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   lily58-vial-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -55,16 +52,15 @@ jobs:
           keyboard: lily58
           keymap: vial
           controller: helios
-          output-dir: lily58
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: lily58
-          dst: ./
-          storage-branch: main
+          name: lily58-vial-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   lily58-vial-keebd-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -72,17 +68,16 @@ jobs:
           keyboard: lily58
           keymap: vial-keebd
           controller: helios
-          output-dir: lily58
+          output-dir: build-output
           local-keymap-path: lily58/keymaps/vial-keebd
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: lily58
-          dst: ./
-          storage-branch: main
+          name: lily58-vial-keebd-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   lily58-default-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -90,16 +85,15 @@ jobs:
           keyboard: lily58
           keymap: default
           controller: svlinky
-          output-dir: lily58
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: lily58
-          dst: ./
-          storage-branch: main
+          name: lily58-default-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   lily58-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -107,17 +101,16 @@ jobs:
           keyboard: lily58
           keymap: via
           controller: svlinky
-          output-dir: lily58
+          output-dir: build-output
           local-keymap-path: lily58/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: lily58
-          dst: ./
-          storage-branch: main
+          name: lily58-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   lily58-vial-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -125,16 +118,15 @@ jobs:
           keyboard: lily58
           keymap: vial
           controller: svlinky
-          output-dir: lily58
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: lily58
-          dst: ./
-          storage-branch: main
+          name: lily58-vial-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   lily58-vik-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -142,10 +134,45 @@ jobs:
           keyboard: lily58
           keymap: vik
           controller: svlinky
-          output-dir: lily58
+          output-dir: build-output
           local-keymap-path: lily58/keymaps/vik
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: lily58
-          dst: ./
-          storage-branch: main
+          name: lily58-vik-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  lily58-release:
+    needs:
+      - lily58-default-helios
+      - lily58-via-helios
+      - lily58-vial-helios
+      - lily58-vial-keebd-helios
+      - lily58-default-svlinky
+      - lily58-via-svlinky
+      - lily58-vial-svlinky
+      - lily58-vik-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: lily58-firmware
+          name: Lily58 Firmware (latest)
+          body: |
+            Latest Lily58 QMK firmware, built automatically from `main`.
+
+            The **VIA** and **Vial** variants now include rotary-encoder support
+            for the Lily58 RE. The same firmware also works on the standard
+            all-switch Lily58 (the encoder pins simply idle), so there is no
+            separate download.
+
+            Variants: `default`, `via`, `vial`, `vial-keebd`, `vik` — each built
+            for the **Helios** and **SVLinky** controllers.
+          files: firmware/*.uf2
