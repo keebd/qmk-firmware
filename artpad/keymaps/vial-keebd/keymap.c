@@ -71,8 +71,8 @@ bool oled_task_user(void) {
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
-    [0] =   { ENCODER_CCW_CW(RGB_VAD, RGB_VAI)  },
-    [1] =  { ENCODER_CCW_CW(RGB_HUD, RGB_HUI)  },
+    [0] =   { ENCODER_CCW_CW(UG_VALD, UG_VALU)  },
+    [1] =  { ENCODER_CCW_CW(UG_HUED, UG_HUEU)  },
 };
 #endif
 
@@ -84,6 +84,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [1] = LAYOUT(
       KC_P, KC_Q, KC_R, KC_S, KC_T,
-      KC_U, KC_V, KC_W, KC_X, RGB_SAI,
-      KC_Z, KC_1, KC_2, KC_3, RGB_SAD, KC_TRNS)
+      KC_U, KC_V, KC_W, KC_X, UG_SATU,
+      KC_Z, KC_1, KC_2, KC_3, UG_SATD, KC_TRNS)
 };

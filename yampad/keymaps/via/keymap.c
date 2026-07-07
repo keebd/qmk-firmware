@@ -95,7 +95,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-------------------'
  */
   [_FN] = LAYOUT(
-    UG_NEXT,  RGB_M_P,  UG_TOGG,   _______,
+    UG_NEXT,  UG_PREV,  UG_TOGG,   _______,
     UG_HUED,  UG_HUEU,  XXXXXXX,
     UG_SATD,  UG_SATU,  XXXXXXX,   XXXXXXX,
     UG_VALD,  UG_VALU,  XXXXXXX,

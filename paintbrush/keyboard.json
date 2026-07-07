@@ -9,6 +9,7 @@
         "device_version": "1.0.0"
     },
     "diode_direction": "COL2ROW",
+    "development_board": "promicro",
     "processor": "atmega32u4",
     "bootloader": "caterina",
     "layouts": {

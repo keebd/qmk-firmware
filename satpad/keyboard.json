@@ -33,6 +33,7 @@
       "enabled": true,
       "matrix": [0,0]
     },
+    "development_board": "promicro",
     "processor": "atmega32u4",
     "url": "https://github.com/jasonhazel/satpad",
     "layouts": {
