@@ -24,7 +24,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-tree-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd-tree-via-helios:
@@ -41,7 +44,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-tree-via-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd-tree-svlinky:
@@ -58,7 +64,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-tree-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd-tree-via-svlinky:
@@ -75,7 +84,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-tree-via-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd_tree-release:
@@ -102,5 +114,8 @@ jobs:
           body: |
             Latest KEEBD Tree Firmware, built automatically from `main`.
 
-            Download the `.uf2` matching your keymap and controller, then flash it.
-          files: firmware/*.uf2
+            Download the firmware matching your keymap and controller, then flash it.
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin

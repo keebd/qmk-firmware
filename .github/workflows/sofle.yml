@@ -23,7 +23,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle-default-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle-via-helios:
@@ -40,7 +43,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle-via-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle-vial-helios:
@@ -57,7 +63,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle-vial-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle-default-svlinky:
@@ -73,7 +82,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle-default-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle-via-svlinky:
@@ -90,7 +102,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle-via-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle-vial-svlinky:
@@ -107,7 +122,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle-vial-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle-release:
@@ -136,5 +154,8 @@ jobs:
           body: |
             Latest Sofle Firmware, built automatically from `main`.
 
-            Download the `.uf2` matching your keymap and controller, then flash it.
-          files: firmware/*.uf2
+            Download the firmware matching your keymap and controller, then flash it.
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin

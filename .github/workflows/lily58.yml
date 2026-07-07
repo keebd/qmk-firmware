@@ -23,7 +23,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lily58-default-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   lily58-via-helios:
@@ -40,7 +43,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lily58-via-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   lily58-vial-helios:
@@ -56,7 +62,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lily58-vial-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   lily58-vial-keebd-helios:
@@ -73,7 +82,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lily58-vial-keebd-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   lily58-default-svlinky:
@@ -89,7 +101,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lily58-default-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   lily58-via-svlinky:
@@ -106,7 +121,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lily58-via-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   lily58-vial-svlinky:
@@ -122,7 +140,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lily58-vial-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   lily58-vik-svlinky:
@@ -139,7 +160,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lily58-vik-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   lily58-release:
@@ -177,4 +201,7 @@ jobs:
 
             Variants: `default`, `via`, `vial`, `vial-keebd`, `vik` — each built
             for the **Helios** and **SVLinky** controllers.
-          files: firmware/*.uf2
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin

@@ -24,7 +24,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: artpad-default-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   artpad-via-helios:
@@ -41,7 +44,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: artpad-via-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   artpad-vial-helios:
@@ -58,7 +64,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: artpad-vial-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   artpad-vial-keebd-helios:
@@ -75,7 +84,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: artpad-vial-keebd-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   artpad-default-svlinky:
@@ -92,7 +104,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: artpad-default-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   artpad-via-svlinky:
@@ -109,7 +124,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: artpad-via-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   artpad-vial-svlinky:
@@ -126,7 +144,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: artpad-vial-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   artpad-release:
@@ -156,5 +177,8 @@ jobs:
           body: |
             Latest ArtPad Firmware, built automatically from `main`.
 
-            Download the `.uf2` matching your keymap and controller, then flash it.
-          files: firmware/*.uf2
+            Download the firmware matching your keymap and controller, then flash it.
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin

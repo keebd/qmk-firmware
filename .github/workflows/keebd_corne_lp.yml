@@ -24,7 +24,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-corne-default-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd-corne-via-helios:
@@ -41,7 +44,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-corne-via-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd-corne-vial-helios:
@@ -58,7 +64,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-corne-vial-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd-corne-default-svlinky:
@@ -75,7 +84,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-corne-default-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd-corne-via-svlinky:
@@ -92,7 +104,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-corne-via-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd-corne-vial-svlinky:
@@ -109,7 +124,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-corne-vial-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   keebd_corne_lp-release:
@@ -138,5 +156,8 @@ jobs:
           body: |
             Latest KEEBD Corne LP Firmware, built automatically from `main`.
 
-            Download the `.uf2` matching your keymap and controller, then flash it.
-          files: firmware/*.uf2
+            Download the firmware matching your keymap and controller, then flash it.
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin

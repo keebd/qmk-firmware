@@ -22,7 +22,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: basketweave-default
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   basketweave-via:
@@ -38,7 +41,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: basketweave-via
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   basketweave-release:
@@ -63,5 +69,8 @@ jobs:
           body: |
             Latest Basketweave Firmware, built automatically from `main`.
 
-            Download the `.uf2` matching your keymap and controller, then flash it.
-          files: firmware/*.uf2
+            Download the firmware matching your keymap and controller, then flash it.
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin

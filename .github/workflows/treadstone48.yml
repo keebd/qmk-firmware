@@ -23,7 +23,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: treadstone48-default-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   treadstone48-via-helios:
@@ -40,7 +43,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: treadstone48-via-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   treadstone48-default-svlinky:
@@ -56,7 +62,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: treadstone48-default-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   treadstone48-via-svlinky:
@@ -73,7 +82,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: treadstone48-via-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   treadstone48-release:
@@ -100,5 +112,8 @@ jobs:
           body: |
             Latest Treadstone48 Firmware, built automatically from `main`.
 
-            Download the `.uf2` matching your keymap and controller, then flash it.
-          files: firmware/*.uf2
+            Download the firmware matching your keymap and controller, then flash it.
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin

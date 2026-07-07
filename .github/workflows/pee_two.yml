@@ -24,7 +24,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: pee-two-default-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   pee-two-via-helios:
@@ -41,7 +44,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: pee-two-via-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   pee-two-vial-helios:
@@ -58,7 +64,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: pee-two-vial-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   pee-two-default-svlinky:
@@ -75,7 +84,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: pee-two-default-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   pee-two-via-svlinky:
@@ -92,7 +104,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: pee-two-via-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   pee-two-vial-svlinky:
@@ -109,7 +124,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: pee-two-vial-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   pee_two-release:
@@ -138,5 +156,8 @@ jobs:
           body: |
             Latest Pee-Two Firmware, built automatically from `main`.
 
-            Download the `.uf2` matching your keymap and controller, then flash it.
-          files: firmware/*.uf2
+            Download the firmware matching your keymap and controller, then flash it.
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin

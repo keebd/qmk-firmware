@@ -23,7 +23,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle_choc-default-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle_choc-via-helios:
@@ -40,7 +43,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle_choc-via-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle_choc-vial-helios:
@@ -56,7 +62,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle_choc-vial-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle_choc-default-svlinky:
@@ -72,7 +81,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle_choc-default-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle_choc-via-svlinky:
@@ -89,7 +101,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle_choc-via-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle_choc-vial-svlinky:
@@ -105,7 +120,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: sofle_choc-vial-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   sofle_choc-release:
@@ -134,5 +152,8 @@ jobs:
           body: |
             Latest Sofle Choc Firmware, built automatically from `main`.
 
-            Download the `.uf2` matching your keymap and controller, then flash it.
-          files: firmware/*.uf2
+            Download the firmware matching your keymap and controller, then flash it.
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin

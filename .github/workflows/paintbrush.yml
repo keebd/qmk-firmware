@@ -24,7 +24,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: paintbrush-left-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   paintbrush-right-helios:
@@ -41,7 +44,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: paintbrush-right-helios
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   paintbrush-left-svlinky:
@@ -58,7 +64,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: paintbrush-left-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   paintbrush-right-svlinky:
@@ -75,7 +84,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: paintbrush-right-svlinky
-          path: build-output/*.uf2
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
           if-no-files-found: error
 
   paintbrush-release:
@@ -102,5 +114,8 @@ jobs:
           body: |
             Latest PaintBrush Firmware, built automatically from `main`.
 
-            Download the `.uf2` matching your keymap and controller, then flash it.
-          files: firmware/*.uf2
+            Download the firmware matching your keymap and controller, then flash it.
+          files: |
+            firmware/*.uf2
+            firmware/*.hex
+            firmware/*.bin
