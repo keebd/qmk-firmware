@@ -18,6 +18,7 @@ jobs:
         with:
           keyboard: sofle
           keymap: default
+          local-keymap-path: sofle/keymaps/default
           controller: helios
           output-dir: build-output
       - uses: actions/upload-artifact@v4
@@ -77,6 +78,7 @@ jobs:
         with:
           keyboard: sofle
           keymap: default
+          local-keymap-path: sofle/keymaps/default
           controller: svlinky
           output-dir: build-output
       - uses: actions/upload-artifact@v4
