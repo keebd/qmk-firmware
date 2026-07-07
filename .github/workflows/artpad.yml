@@ -12,7 +12,6 @@ on:
 jobs:
   artpad-default-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,17 +19,16 @@ jobs:
           keyboard: artpad
           keymap: default
           controller: helios
+          output-dir: build-output
           local-keyboard-path: artpad
-          output-dir: artpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: artpad
-          dst: ./
-          storage-branch: main
+          name: artpad-default-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   artpad-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -38,17 +36,16 @@ jobs:
           keyboard: artpad
           keymap: via
           controller: helios
+          output-dir: build-output
           local-keyboard-path: artpad
-          output-dir: artpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: artpad
-          dst: ./
-          storage-branch: main
+          name: artpad-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   artpad-vial-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -56,17 +53,16 @@ jobs:
           keyboard: artpad
           keymap: vial
           controller: helios
+          output-dir: build-output
           local-keyboard-path: artpad
-          output-dir: artpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: artpad
-          dst: ./
-          storage-branch: main
+          name: artpad-vial-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   artpad-vial-keebd-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -74,35 +70,33 @@ jobs:
           keyboard: artpad
           keymap: vial-keebd
           controller: helios
+          output-dir: build-output
           local-keyboard-path: artpad
-          output-dir: artpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: artpad
-          dst: ./
-          storage-branch: main
+          name: artpad-vial-keebd-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   artpad-default-svlinky:
-      runs-on: ubuntu-latest
-  
-      steps:
-        - uses: actions/checkout@v4
-        - uses: keebd/build-qmk-fw@main
-          with:
-            keyboard: artpad
-            keymap: default
-            controller: svlinky
-            local-keyboard-path: artpad
-            output-dir: artpad
-        - uses: sylvanld/action-storage@v1
-          with:
-            src: artpad
-            dst: ./
-            storage-branch: main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: artpad
+          keymap: default
+          controller: svlinky
+          output-dir: build-output
+          local-keyboard-path: artpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artpad-default-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   artpad-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -110,17 +104,16 @@ jobs:
           keyboard: artpad
           keymap: via
           controller: svlinky
+          output-dir: build-output
           local-keyboard-path: artpad
-          output-dir: artpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: artpad
-          dst: ./
-          storage-branch: main
-  
+          name: artpad-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
   artpad-vial-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -128,10 +121,40 @@ jobs:
           keyboard: artpad
           keymap: vial
           controller: svlinky
+          output-dir: build-output
           local-keyboard-path: artpad
-          output-dir: artpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: artpad
-          dst: ./
-          storage-branch: main
+          name: artpad-vial-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  artpad-release:
+    needs:
+      - artpad-default-helios
+      - artpad-via-helios
+      - artpad-vial-helios
+      - artpad-vial-keebd-helios
+      - artpad-default-svlinky
+      - artpad-via-svlinky
+      - artpad-vial-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: artpad-firmware
+          name: ArtPad Firmware (latest)
+          body: |
+            Latest ArtPad Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2

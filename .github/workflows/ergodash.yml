@@ -12,7 +12,6 @@ on:
 jobs:
   ergodash-default-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,16 +19,15 @@ jobs:
           keyboard: omkbd/ergodash/rev1
           keymap: default
           controller: helios
-          output-dir: ergodash
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: ergodash
-          dst: ./
-          storage-branch: main
+          name: ergodash-default-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   ergodash-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -37,17 +35,16 @@ jobs:
           keyboard: omkbd/ergodash/rev1
           keymap: via
           controller: helios
-          output-dir: ergodash
+          output-dir: build-output
           local-keymap-path: ergodash/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: ergodash
-          dst: ./
-          storage-branch: main
+          name: ergodash-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   ergodash-vial-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -55,16 +52,15 @@ jobs:
           keyboard: omkbd/ergodash/rev1
           keymap: vial
           controller: helios
-          output-dir: ergodash
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: ergodash
-          dst: ./
-          storage-branch: main
+          name: ergodash-vial-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   ergodash-default-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -72,16 +68,15 @@ jobs:
           keyboard: omkbd/ergodash/rev1
           keymap: default
           controller: svlinky
-          output-dir: ergodash
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: ergodash
-          dst: ./
-          storage-branch: main
+          name: ergodash-default-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   ergodash-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -89,17 +84,16 @@ jobs:
           keyboard: omkbd/ergodash/rev1
           keymap: via
           controller: svlinky
-          output-dir: ergodash
+          output-dir: build-output
           local-keymap-path: ergodash/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: ergodash
-          dst: ./
-          storage-branch: main
+          name: ergodash-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   ergodash-vial-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -107,9 +101,38 @@ jobs:
           keyboard: omkbd/ergodash/rev1
           keymap: vial
           controller: svlinky
-          output-dir: ergodash
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: ergodash
-          dst: ./
-          storage-branch: main
+          name: ergodash-vial-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  ergodash-release:
+    needs:
+      - ergodash-default-helios
+      - ergodash-via-helios
+      - ergodash-vial-helios
+      - ergodash-default-svlinky
+      - ergodash-via-svlinky
+      - ergodash-vial-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: ergodash-firmware
+          name: Ergodash Firmware (latest)
+          body: |
+            Latest Ergodash Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2

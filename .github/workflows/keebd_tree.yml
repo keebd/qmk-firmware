@@ -12,7 +12,6 @@ on:
 jobs:
   keebd-tree-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,17 +19,16 @@ jobs:
           keyboard: keebd_tree
           keymap: default
           controller: helios
+          output-dir: build-output
           local-keyboard-path: keebd_tree
-          output-dir: keebd_tree
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: keebd_tree
-          dst: ./
-          storage-branch: main
+          name: keebd-tree-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   keebd-tree-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -38,17 +36,16 @@ jobs:
           keyboard: keebd_tree
           keymap: via
           controller: helios
+          output-dir: build-output
           local-keyboard-path: keebd_tree
-          output-dir: keebd_tree
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: keebd_tree
-          dst: ./
-          storage-branch: main
+          name: keebd-tree-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   keebd-tree-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -56,17 +53,16 @@ jobs:
           keyboard: keebd_tree
           keymap: default
           controller: svlinky
+          output-dir: build-output
           local-keyboard-path: keebd_tree
-          output-dir: keebd_tree
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: keebd_tree
-          dst: ./
-          storage-branch: main
+          name: keebd-tree-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   keebd-tree-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -74,10 +70,37 @@ jobs:
           keyboard: keebd_tree
           keymap: via
           controller: svlinky
+          output-dir: build-output
           local-keyboard-path: keebd_tree
-          output-dir: keebd_tree
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: keebd_tree
-          dst: ./
-          storage-branch: main
+          name: keebd-tree-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  keebd_tree-release:
+    needs:
+      - keebd-tree-helios
+      - keebd-tree-via-helios
+      - keebd-tree-svlinky
+      - keebd-tree-via-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: keebd_tree-firmware
+          name: KEEBD Tree Firmware (latest)
+          body: |
+            Latest KEEBD Tree Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2

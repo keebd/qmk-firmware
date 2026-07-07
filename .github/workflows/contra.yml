@@ -12,7 +12,6 @@ on:
 jobs:
   contra-default-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,16 +19,15 @@ jobs:
           keyboard: contra
           keymap: default
           controller: helios
-          output-dir: contra
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: contra
-          dst: ./
-          storage-branch: main
+          name: contra-default-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   contra-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -37,17 +35,16 @@ jobs:
           keyboard: contra
           keymap: via
           controller: helios
-          output-dir: contra
+          output-dir: build-output
           local-keymap-path: contra/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: contra
-          dst: ./
-          storage-branch: main
+          name: contra-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   contra-vial-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -55,16 +52,15 @@ jobs:
           keyboard: contra
           keymap: vial
           controller: helios
-          output-dir: contra
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: contra
-          dst: ./
-          storage-branch: main
+          name: contra-vial-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   contra-default-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -72,16 +68,15 @@ jobs:
           keyboard: contra
           keymap: default
           controller: svlinky
-          output-dir: contra
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: contra
-          dst: ./
-          storage-branch: main
+          name: contra-default-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   contra-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -89,17 +84,16 @@ jobs:
           keyboard: contra
           keymap: via
           controller: svlinky
-          output-dir: contra
+          output-dir: build-output
           local-keymap-path: contra/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: contra
-          dst: ./
-          storage-branch: main
+          name: contra-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   contra-vial-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -107,9 +101,38 @@ jobs:
           keyboard: contra
           keymap: vial
           controller: svlinky
-          output-dir: contra
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: contra
-          dst: ./
-          storage-branch: main
+          name: contra-vial-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  contra-release:
+    needs:
+      - contra-default-helios
+      - contra-via-helios
+      - contra-vial-helios
+      - contra-default-svlinky
+      - contra-via-svlinky
+      - contra-vial-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: contra-firmware
+          name: Contra Firmware (latest)
+          body: |
+            Latest Contra Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2

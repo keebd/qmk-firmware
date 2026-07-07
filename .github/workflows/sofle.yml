@@ -12,7 +12,6 @@ on:
 jobs:
   sofle-default-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,16 +19,15 @@ jobs:
           keyboard: sofle
           keymap: rgb_default
           controller: helios
-          output-dir: sofle
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: sofle
-          dst: ./
-          storage-branch: main
+          name: sofle-default-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   sofle-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -37,17 +35,16 @@ jobs:
           keyboard: sofle
           keymap: via
           controller: helios
+          output-dir: build-output
           local-keymap-path: sofle/keymaps/via
-          output-dir: sofle
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: sofle
-          dst: ./
-          storage-branch: main
+          name: sofle-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   sofle-vial-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -55,17 +52,16 @@ jobs:
           keyboard: sofle
           keymap: vial
           controller: helios
-          output-dir: sofle
+          output-dir: build-output
           local-keymap-path: sofle/keymaps/vial
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: sofle
-          dst: ./
-          storage-branch: main
+          name: sofle-vial-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   sofle-default-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -73,16 +69,15 @@ jobs:
           keyboard: sofle
           keymap: rgb_default
           controller: svlinky
-          output-dir: sofle
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: sofle
-          dst: ./
-          storage-branch: main
+          name: sofle-default-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   sofle-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -90,17 +85,16 @@ jobs:
           keyboard: sofle
           keymap: via
           controller: svlinky
+          output-dir: build-output
           local-keymap-path: sofle/keymaps/via
-          output-dir: sofle
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: sofle
-          dst: ./
-          storage-branch: main
+          name: sofle-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   sofle-vial-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -108,10 +102,39 @@ jobs:
           keyboard: sofle
           keymap: vial
           controller: svlinky
-          output-dir: sofle
+          output-dir: build-output
           local-keymap-path: sofle/keymaps/vial
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: sofle
-          dst: ./
-          storage-branch: main
+          name: sofle-vial-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  sofle-release:
+    needs:
+      - sofle-default-helios
+      - sofle-via-helios
+      - sofle-vial-helios
+      - sofle-default-svlinky
+      - sofle-via-svlinky
+      - sofle-vial-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: sofle-firmware
+          name: Sofle Firmware (latest)
+          body: |
+            Latest Sofle Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2

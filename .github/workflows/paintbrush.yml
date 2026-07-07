@@ -12,7 +12,6 @@ on:
 jobs:
   paintbrush-left-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,17 +19,16 @@ jobs:
           keyboard: paintbrush
           keymap: left
           controller: helios
+          output-dir: build-output
           local-keyboard-path: paintbrush
-          output-dir: paintbrush
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: paintbrush
-          dst: ./
-          storage-branch: main
+          name: paintbrush-left-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   paintbrush-right-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -38,17 +36,16 @@ jobs:
           keyboard: paintbrush
           keymap: right
           controller: helios
+          output-dir: build-output
           local-keyboard-path: paintbrush
-          output-dir: paintbrush
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: paintbrush
-          dst: ./
-          storage-branch: main
+          name: paintbrush-right-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   paintbrush-left-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -56,17 +53,16 @@ jobs:
           keyboard: paintbrush
           keymap: left
           controller: svlinky
+          output-dir: build-output
           local-keyboard-path: paintbrush
-          output-dir: paintbrush
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: paintbrush
-          dst: ./
-          storage-branch: main
+          name: paintbrush-left-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   paintbrush-right-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -74,10 +70,37 @@ jobs:
           keyboard: paintbrush
           keymap: right
           controller: svlinky
+          output-dir: build-output
           local-keyboard-path: paintbrush
-          output-dir: paintbrush
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: paintbrush
-          dst: ./
-          storage-branch: main
+          name: paintbrush-right-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  paintbrush-release:
+    needs:
+      - paintbrush-left-helios
+      - paintbrush-right-helios
+      - paintbrush-left-svlinky
+      - paintbrush-right-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: paintbrush-firmware
+          name: PaintBrush Firmware (latest)
+          body: |
+            Latest PaintBrush Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2

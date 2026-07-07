@@ -12,7 +12,6 @@ on:
 jobs:
   eternal_keypad-default-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,16 +19,15 @@ jobs:
           keyboard: eternal_keypad
           keymap: default
           controller: helios
-          output-dir: eternal_keypad
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: eternal_keypad
-          dst: ./
-          storage-branch: main
+          name: eternal_keypad-default-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   eternal_keypad-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -37,17 +35,16 @@ jobs:
           keyboard: eternal_keypad
           keymap: via
           controller: helios
-          output-dir: eternal_keypad
+          output-dir: build-output
           local-keymap-path: eternal_keypad/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: eternal_keypad
-          dst: ./
-          storage-branch: main
+          name: eternal_keypad-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   eternal_keypad-default-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -55,16 +52,15 @@ jobs:
           keyboard: eternal_keypad
           keymap: default
           controller: svlinky
-          output-dir: eternal_keypad
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: eternal_keypad
-          dst: ./
-          storage-branch: main
+          name: eternal_keypad-default-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   eternal_keypad-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -72,10 +68,37 @@ jobs:
           keyboard: eternal_keypad
           keymap: via
           controller: svlinky
-          output-dir: eternal_keypad
+          output-dir: build-output
           local-keymap-path: eternal_keypad/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: eternal_keypad
-          dst: ./
-          storage-branch: main
+          name: eternal_keypad-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  eternal_keypad-release:
+    needs:
+      - eternal_keypad-default-helios
+      - eternal_keypad-via-helios
+      - eternal_keypad-default-svlinky
+      - eternal_keypad-via-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: eternal_keypad-firmware
+          name: Eternal Keypad Firmware (latest)
+          body: |
+            Latest Eternal Keypad Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2

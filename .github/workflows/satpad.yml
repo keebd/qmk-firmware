@@ -12,7 +12,6 @@ on:
 jobs:
   satpad-default-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,17 +19,16 @@ jobs:
           keyboard: satpad
           keymap: default
           controller: helios
-          output-dir: satpad
+          output-dir: build-output
           local-keyboard-path: satpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: satpad
-          dst: ./
-          storage-branch: main
+          name: satpad-default-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   satpad-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -38,17 +36,16 @@ jobs:
           keyboard: satpad
           keymap: via
           controller: helios
-          output-dir: satpad
+          output-dir: build-output
           local-keyboard-path: satpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: satpad
-          dst: ./
-          storage-branch: main
+          name: satpad-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   satpad-default-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -56,17 +53,16 @@ jobs:
           keyboard: satpad
           keymap: default
           controller: svlinky
-          output-dir: satpad
+          output-dir: build-output
           local-keyboard-path: satpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: satpad
-          dst: ./
-          storage-branch: main
+          name: satpad-default-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   satpad-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -74,10 +70,37 @@ jobs:
           keyboard: satpad
           keymap: via
           controller: svlinky
-          output-dir: satpad
+          output-dir: build-output
           local-keyboard-path: satpad
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: satpad
-          dst: ./
-          storage-branch: main
+          name: satpad-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  satpad-release:
+    needs:
+      - satpad-default-helios
+      - satpad-via-helios
+      - satpad-default-svlinky
+      - satpad-via-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: satpad-firmware
+          name: Satpad Firmware (latest)
+          body: |
+            Latest Satpad Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2

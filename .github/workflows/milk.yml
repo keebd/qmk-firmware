@@ -10,10 +10,8 @@ on:
     - milk/**
 
 jobs:
-
   milk-default-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -21,16 +19,15 @@ jobs:
           keyboard: spaceman/2_milk
           keymap: default
           controller: helios
-          output-dir: milk
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: milk
-          dst: ./
-          storage-branch: main
+          name: milk-default-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   milk-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -38,17 +35,16 @@ jobs:
           keyboard: spaceman/2_milk
           keymap: via
           controller: helios
-          output-dir: milk
+          output-dir: build-output
           local-keymap-path: milk/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: milk
-          dst: ./
-          storage-branch: main
+          name: milk-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   milk-vial-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -56,16 +52,15 @@ jobs:
           keyboard: spaceman/2_milk
           keymap: vial
           controller: helios
-          output-dir: milk
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: milk
-          dst: ./
-          storage-branch: main
+          name: milk-vial-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   milk-default-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -73,16 +68,15 @@ jobs:
           keyboard: spaceman/2_milk
           keymap: default
           controller: svlinky
-          output-dir: milk
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: milk
-          dst: ./
-          storage-branch: main
+          name: milk-default-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   milk-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -90,17 +84,16 @@ jobs:
           keyboard: spaceman/2_milk
           keymap: via
           controller: svlinky
-          output-dir: milk
+          output-dir: build-output
           local-keymap-path: milk/keymaps/via
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: milk
-          dst: ./
-          storage-branch: main
+          name: milk-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   milk-vial-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -108,9 +101,38 @@ jobs:
           keyboard: spaceman/2_milk
           keymap: vial
           controller: svlinky
-          output-dir: milk
-      - uses: sylvanld/action-storage@v1
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
         with:
-          src: milk
-          dst: ./
-          storage-branch: main
+          name: milk-vial-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  milk-release:
+    needs:
+      - milk-default-helios
+      - milk-via-helios
+      - milk-vial-helios
+      - milk-default-svlinky
+      - milk-via-svlinky
+      - milk-vial-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: milk-firmware
+          name: Milk Firmware (latest)
+          body: |
+            Latest Milk Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2

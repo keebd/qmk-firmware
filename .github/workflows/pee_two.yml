@@ -12,7 +12,6 @@ on:
 jobs:
   pee-two-default-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -20,17 +19,16 @@ jobs:
           keyboard: pee_two
           keymap: default
           controller: helios
+          output-dir: build-output
           local-keyboard-path: pee_two
-          output-dir: pee_two
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: pee_two
-          dst: ./
-          storage-branch: main
+          name: pee-two-default-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   pee-two-via-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -38,17 +36,16 @@ jobs:
           keyboard: pee_two
           keymap: via
           controller: helios
+          output-dir: build-output
           local-keyboard-path: pee_two
-          output-dir: pee_two
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: pee_two
-          dst: ./
-          storage-branch: main
+          name: pee-two-via-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   pee-two-vial-helios:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -56,17 +53,16 @@ jobs:
           keyboard: pee_two
           keymap: vial
           controller: helios
+          output-dir: build-output
           local-keyboard-path: pee_two
-          output-dir: pee_two
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: pee_two
-          dst: ./
-          storage-branch: main
+          name: pee-two-vial-helios
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   pee-two-default-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -74,17 +70,16 @@ jobs:
           keyboard: pee_two
           keymap: default
           controller: svlinky
+          output-dir: build-output
           local-keyboard-path: pee_two
-          output-dir: pee_two
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: pee_two
-          dst: ./
-          storage-branch: main
+          name: pee-two-default-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   pee-two-via-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@main
@@ -92,17 +87,16 @@ jobs:
           keyboard: pee_two
           keymap: via
           controller: svlinky
+          output-dir: build-output
           local-keyboard-path: pee_two
-          output-dir: pee_two
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: pee_two
-          dst: ./
-          storage-branch: main
+          name: pee-two-via-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
 
   pee-two-vial-svlinky:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: keebd/build-qmk-fw@vial-qmk
@@ -110,10 +104,39 @@ jobs:
           keyboard: pee_two
           keymap: vial
           controller: svlinky
+          output-dir: build-output
           local-keyboard-path: pee_two
-          output-dir: pee_two
-      - uses: sylvanld/action-storage@v1
+      - uses: actions/upload-artifact@v4
         with:
-          src: pee_two
-          dst: ./
-          storage-branch: main
+          name: pee-two-vial-svlinky
+          path: build-output/*.uf2
+          if-no-files-found: error
+
+  pee_two-release:
+    needs:
+      - pee-two-default-helios
+      - pee-two-via-helios
+      - pee-two-vial-helios
+      - pee-two-default-svlinky
+      - pee-two-via-svlinky
+      - pee-two-vial-svlinky
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: firmware
+          merge-multiple: true
+      - name: Publish firmware as a rolling release
+        # Pinned to a commit SHA (supply-chain hardening); Renovate bumps the
+        # SHA + comment via PR. This action runs with contents: write.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          tag_name: pee_two-firmware
+          name: Pee-Two Firmware (latest)
+          body: |
+            Latest Pee-Two Firmware, built automatically from `main`.
+
+            Download the `.uf2` matching your keymap and controller, then flash it.
+          files: firmware/*.uf2
