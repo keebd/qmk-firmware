@@ -2,7 +2,7 @@
     "name": "Crkbd",
     "vendorId": "0x4653",
     "productId": "0x0001",
-    "lighting": "vialrgb",
+    "lighting": "qmk_rgblight",
     "matrix": { "rows": 8, "cols": 6 },
     "layouts": {
         "keymap": [
