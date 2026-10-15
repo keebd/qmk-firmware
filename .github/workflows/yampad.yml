@@ -93,6 +93,46 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  yampad-vial-helios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: yampad
+          keymap: vial
+          controller: helios
+          output-dir: build-output
+          local-keymap-path: yampad/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yampad-vial-helios
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  yampad-vial-svlinky:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: yampad
+          keymap: vial
+          controller: svlinky
+          output-dir: build-output
+          local-keymap-path: yampad/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yampad-vial-svlinky
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   yampad-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -101,6 +141,8 @@ jobs:
       - yampad-via-helios
       - yampad-default-svlinky
       - yampad-via-svlinky
+      - yampad-vial-helios
+      - yampad-vial-svlinky
     runs-on: ubuntu-latest
     permissions:
       contents: write

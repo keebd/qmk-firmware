@@ -95,6 +95,46 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  satpad-vial-helios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: satpad
+          keymap: vial
+          controller: helios
+          output-dir: build-output
+          local-keyboard-path: satpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: satpad-vial-helios
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  satpad-vial-svlinky:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: satpad
+          keymap: vial
+          controller: svlinky
+          output-dir: build-output
+          local-keyboard-path: satpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: satpad-vial-svlinky
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   satpad-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -103,6 +143,8 @@ jobs:
       - satpad-via-helios
       - satpad-default-svlinky
       - satpad-via-svlinky
+      - satpad-vial-helios
+      - satpad-vial-svlinky
     runs-on: ubuntu-latest
     permissions:
       contents: write

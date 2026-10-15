@@ -97,6 +97,48 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  chocv-vial-helios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: chocv
+          keymap: vial
+          controller: helios
+          pin-compatible: promicro
+          output-dir: build-output
+          local-keymap-path: chocv/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chocv-vial-helios
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  chocv-vial-svlinky:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: chocv
+          keymap: vial
+          controller: svlinky
+          pin-compatible: promicro
+          output-dir: build-output
+          local-keymap-path: chocv/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chocv-vial-svlinky
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   chocv-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -105,6 +147,8 @@ jobs:
       - chocv-via-helios
       - chocv-default-svlinky
       - chocv-via-svlinky
+      - chocv-vial-helios
+      - chocv-vial-svlinky
     runs-on: ubuntu-latest
     permissions:
       contents: write
