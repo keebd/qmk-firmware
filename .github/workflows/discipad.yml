@@ -52,12 +52,32 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  discipad-vial:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: coseyfannitutti/discipad
+          keymap: vial
+          output-dir: build-output
+          local-keymap-path: discipad/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: discipad-vial
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   discipad-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
     needs:
       - discipad-default
       - discipad-via
+      - discipad-vial
     runs-on: ubuntu-latest
     permissions:
       contents: write

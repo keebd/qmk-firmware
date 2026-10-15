@@ -1,0 +1,12 @@
+{
+    "name": "Tree",
+    "vendorId": "0x6264",
+    "productId": "0x1705",
+    "lighting": "none",
+    "matrix": { "rows": 1, "cols": 2 },
+    "layouts": {
+        "keymap": [
+            ["0,0","0,1"]
+        ]
+    }
+}

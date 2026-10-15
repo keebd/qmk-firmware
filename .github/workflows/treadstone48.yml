@@ -97,6 +97,48 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  treadstone48-vial-helios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: marksard/treadstone48
+          keymap: vial
+          controller: helios
+          pin-compatible: promicro
+          output-dir: build-output
+          local-keymap-path: treadstone48/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: treadstone48-vial-helios
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  treadstone48-vial-svlinky:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: marksard/treadstone48
+          keymap: vial
+          controller: svlinky
+          pin-compatible: promicro
+          output-dir: build-output
+          local-keymap-path: treadstone48/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: treadstone48-vial-svlinky
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   treadstone48-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -105,6 +147,8 @@ jobs:
       - treadstone48-via-helios
       - treadstone48-default-svlinky
       - treadstone48-via-svlinky
+      - treadstone48-vial-helios
+      - treadstone48-vial-svlinky
     runs-on: ubuntu-latest
     permissions:
       contents: write

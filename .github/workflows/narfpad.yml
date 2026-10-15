@@ -52,12 +52,32 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  narfpad-vial:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: narfpad
+          keymap: vial
+          output-dir: build-output
+          local-keyboard-path: narfpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: narfpad-vial
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   narfpad-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
     needs:
       - narfpad-default
       - narfpad-via
+      - narfpad-vial
     runs-on: ubuntu-latest
     permissions:
       contents: write
