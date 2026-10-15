@@ -14,11 +14,18 @@ on:
     - .github/workflows/draculad.yml
     - draculad/**
 
+# Least privilege: build jobs only read the repo; each release job grants
+# itself contents: write.
+permissions:
+  contents: read
+
 jobs:
   draculad-default-helios:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@main
         with:
           keyboard: draculad
@@ -38,6 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@main
         with:
           keyboard: draculad
@@ -57,6 +66,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@vial-qmk
         with:
           keyboard: draculad
@@ -77,6 +88,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@vial-qmk
         with:
           keyboard: draculad
@@ -97,6 +110,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@main
         with:
           keyboard: draculad
@@ -115,6 +130,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@main
         with:
           keyboard: draculad
@@ -134,6 +151,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@vial-qmk
         with:
           keyboard: draculad
@@ -153,6 +172,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@vial-qmk
         with:
           keyboard: draculad
