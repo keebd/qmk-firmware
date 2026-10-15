@@ -97,6 +97,84 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  treadstone48-default-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: marksard/treadstone48
+          keymap: default
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: treadstone48-default-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  treadstone48-default-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: marksard/treadstone48
+          keymap: default
+          controller: stemcell
+          pin-compatible: promicro
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: treadstone48-default-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  treadstone48-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: marksard/treadstone48
+          keymap: vial
+          output-dir: build-output
+          local-keymap-path: treadstone48/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: treadstone48-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  treadstone48-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: marksard/treadstone48
+          keymap: vial
+          controller: stemcell
+          pin-compatible: promicro
+          output-dir: build-output
+          local-keymap-path: treadstone48/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: treadstone48-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   treadstone48-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -105,6 +183,10 @@ jobs:
       - treadstone48-default-svlinky
       - treadstone48-vial-helios
       - treadstone48-vial-svlinky
+      - treadstone48-default-promicro
+      - treadstone48-default-stemcell
+      - treadstone48-vial-promicro
+      - treadstone48-vial-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write

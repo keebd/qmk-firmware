@@ -93,6 +93,82 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  rhymestone-default-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: marksard/rhymestone
+          keymap: default
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rhymestone-default-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  rhymestone-default-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: marksard/rhymestone
+          keymap: default
+          controller: stemcell
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rhymestone-default-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  rhymestone-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: marksard/rhymestone
+          keymap: vial
+          output-dir: build-output
+          local-keymap-path: rhymestone/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rhymestone-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  rhymestone-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: marksard/rhymestone
+          keymap: vial
+          controller: stemcell
+          output-dir: build-output
+          local-keymap-path: rhymestone/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rhymestone-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   rhymestone-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -101,6 +177,10 @@ jobs:
       - rhymestone-default-svlinky
       - rhymestone-vial-helios
       - rhymestone-vial-svlinky
+      - rhymestone-default-promicro
+      - rhymestone-default-stemcell
+      - rhymestone-vial-promicro
+      - rhymestone-vial-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write

@@ -95,6 +95,84 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  sofle-default-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: sofle
+          keymap: default
+          local-keymap-path: sofle/keymaps/default
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sofle-default-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  sofle-default-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: sofle
+          keymap: default
+          local-keymap-path: sofle/keymaps/default
+          controller: stemcell
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sofle-default-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  sofle-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: sofle
+          keymap: vial
+          output-dir: build-output
+          local-keymap-path: sofle/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sofle-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  sofle-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: sofle
+          keymap: vial
+          controller: stemcell
+          output-dir: build-output
+          local-keymap-path: sofle/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sofle-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   sofle-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -103,6 +181,10 @@ jobs:
       - sofle-vial-helios
       - sofle-default-svlinky
       - sofle-vial-svlinky
+      - sofle-default-promicro
+      - sofle-default-stemcell
+      - sofle-vial-promicro
+      - sofle-vial-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write

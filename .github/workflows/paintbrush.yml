@@ -95,6 +95,84 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  paintbrush-left-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: paintbrush
+          keymap: left
+          output-dir: build-output
+          local-keyboard-path: paintbrush
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paintbrush-left-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  paintbrush-left-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: paintbrush
+          keymap: left
+          controller: stemcell
+          output-dir: build-output
+          local-keyboard-path: paintbrush
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paintbrush-left-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  paintbrush-right-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: paintbrush
+          keymap: right
+          output-dir: build-output
+          local-keyboard-path: paintbrush
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paintbrush-right-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  paintbrush-right-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: paintbrush
+          keymap: right
+          controller: stemcell
+          output-dir: build-output
+          local-keyboard-path: paintbrush
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paintbrush-right-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   paintbrush-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -103,6 +181,10 @@ jobs:
       - paintbrush-right-helios
       - paintbrush-left-svlinky
       - paintbrush-right-svlinky
+      - paintbrush-left-promicro
+      - paintbrush-left-stemcell
+      - paintbrush-right-promicro
+      - paintbrush-right-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write

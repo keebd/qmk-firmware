@@ -93,6 +93,82 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  ergodash_mini-default-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: omkbd/ergodash/mini
+          keymap: default
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ergodash_mini-default-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  ergodash_mini-default-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: omkbd/ergodash/mini
+          keymap: default
+          controller: stemcell
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ergodash_mini-default-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  ergodash_mini-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: omkbd/ergodash/mini
+          keymap: vial
+          output-dir: build-output
+          local-keymap-path: ergodash_mini/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ergodash_mini-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  ergodash_mini-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: omkbd/ergodash/mini
+          keymap: vial
+          controller: stemcell
+          output-dir: build-output
+          local-keymap-path: ergodash_mini/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ergodash_mini-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   ergodash_mini-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -101,6 +177,10 @@ jobs:
       - ergodash_mini-default-svlinky
       - ergodash_mini-vial-helios
       - ergodash_mini-vial-svlinky
+      - ergodash_mini-default-promicro
+      - ergodash_mini-default-stemcell
+      - ergodash_mini-vial-promicro
+      - ergodash_mini-vial-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write

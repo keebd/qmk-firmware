@@ -93,6 +93,82 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  dumbpad_oled-default-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: dumbpad/v1x_oled
+          keymap: default
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dumbpad_oled-default-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  dumbpad_oled-default-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: dumbpad/v1x_oled
+          keymap: default
+          controller: stemcell
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dumbpad_oled-default-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  dumbpad_oled-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: dumbpad/v1x_oled
+          keymap: vial
+          output-dir: build-output
+          local-keymap-path: dumbpad_oled/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dumbpad_oled-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  dumbpad_oled-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: dumbpad/v1x_oled
+          keymap: vial
+          controller: stemcell
+          output-dir: build-output
+          local-keymap-path: dumbpad_oled/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dumbpad_oled-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   dumbpad_oled-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -101,6 +177,10 @@ jobs:
       - dumbpad_oled-default-svlinky
       - dumbpad_oled-vial-helios
       - dumbpad_oled-vial-svlinky
+      - dumbpad_oled-default-promicro
+      - dumbpad_oled-default-stemcell
+      - dumbpad_oled-vial-promicro
+      - dumbpad_oled-vial-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write

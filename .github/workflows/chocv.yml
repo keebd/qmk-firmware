@@ -97,6 +97,84 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  chocv-default-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: chocv
+          keymap: default
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chocv-default-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  chocv-default-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: chocv
+          keymap: default
+          controller: stemcell
+          pin-compatible: promicro
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chocv-default-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  chocv-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: chocv
+          keymap: vial
+          output-dir: build-output
+          local-keymap-path: chocv/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chocv-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  chocv-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: chocv
+          keymap: vial
+          controller: stemcell
+          pin-compatible: promicro
+          output-dir: build-output
+          local-keymap-path: chocv/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chocv-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   chocv-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -105,6 +183,10 @@ jobs:
       - chocv-default-svlinky
       - chocv-vial-helios
       - chocv-vial-svlinky
+      - chocv-default-promicro
+      - chocv-default-stemcell
+      - chocv-vial-promicro
+      - chocv-vial-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write

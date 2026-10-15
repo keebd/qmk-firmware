@@ -115,6 +115,123 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  artpad-default-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: artpad
+          keymap: default
+          output-dir: build-output
+          local-keyboard-path: artpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artpad-default-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  artpad-default-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: artpad
+          keymap: default
+          controller: stemcell
+          output-dir: build-output
+          local-keyboard-path: artpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artpad-default-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  artpad-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: artpad
+          keymap: vial
+          output-dir: build-output
+          local-keyboard-path: artpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artpad-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  artpad-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: artpad
+          keymap: vial
+          controller: stemcell
+          output-dir: build-output
+          local-keyboard-path: artpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artpad-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  artpad-vial-keebd-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: artpad
+          keymap: vial-keebd
+          output-dir: build-output
+          local-keyboard-path: artpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artpad-vial-keebd-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  artpad-vial-keebd-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: artpad
+          keymap: vial-keebd
+          controller: stemcell
+          output-dir: build-output
+          local-keyboard-path: artpad
+      - uses: actions/upload-artifact@v4
+        with:
+          name: artpad-vial-keebd-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   artpad-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -124,6 +241,12 @@ jobs:
       - artpad-vial-keebd-helios
       - artpad-default-svlinky
       - artpad-vial-svlinky
+      - artpad-default-promicro
+      - artpad-default-stemcell
+      - artpad-vial-promicro
+      - artpad-vial-stemcell
+      - artpad-vial-keebd-promicro
+      - artpad-vial-keebd-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write
