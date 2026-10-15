@@ -131,6 +131,119 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  lily58-default-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: lily58
+          keymap: default
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lily58-default-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  lily58-default-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: lily58
+          keymap: default
+          controller: stemcell
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lily58-default-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  lily58-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: lily58
+          keymap: vial
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lily58-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  lily58-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: lily58
+          keymap: vial
+          controller: stemcell
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lily58-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  lily58-vial-keebd-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: lily58
+          keymap: vial-keebd
+          output-dir: build-output
+          local-keymap-path: lily58/keymaps/vial-keebd
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lily58-vial-keebd-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  lily58-vial-keebd-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: lily58
+          keymap: vial-keebd
+          controller: stemcell
+          output-dir: build-output
+          local-keymap-path: lily58/keymaps/vial-keebd
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lily58-vial-keebd-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   lily58-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -141,6 +254,12 @@ jobs:
       - lily58-default-svlinky
       - lily58-vial-svlinky
       - lily58-vik-svlinky
+      - lily58-default-promicro
+      - lily58-default-stemcell
+      - lily58-vial-promicro
+      - lily58-vial-stemcell
+      - lily58-vial-keebd-promicro
+      - lily58-vial-keebd-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -159,13 +278,20 @@ jobs:
           body: |
             Latest Lily58 QMK firmware, built automatically from `main`.
 
-            The **VIA** and **Vial** variants now include rotary-encoder support
-            for the Lily58 RE. The same firmware also works on the standard
-            all-switch Lily58 (the encoder pins simply idle), so there is no
-            separate download.
+            The **Vial** variants include rotary-encoder support for the
+            Lily58 RE. The same firmware also works on the standard all-switch
+            Lily58 (the encoder pins simply idle), so there is no separate
+            download.
 
-            Variants: `default`, `via`, `vial`, `vial-keebd`, `vik` — each built
-            for the **Helios** and **SVLinky** controllers.
+            Variants and controllers:
+            - `default`, `vial`: **Helios**, **SVLinky**, **StemCell** (`.uf2`)
+              and classic **Pro Micro** (`.hex`)
+            - `vial-keebd`: **Helios**, **StemCell** (`.uf2`) and classic
+              **Pro Micro** (`.hex`)
+            - `vik`: **SVLinky** only
+
+            Pro Micro Vial builds have some Vial extras (e.g. QMK Settings,
+            tap dance, combos) turned off to fit the ATmega32U4.
           files: |
             firmware/*.uf2
             firmware/*.hex

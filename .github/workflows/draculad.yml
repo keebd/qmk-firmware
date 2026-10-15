@@ -93,6 +93,82 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  draculad-default-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: draculad
+          keymap: default
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: draculad-default-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  draculad-default-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: draculad
+          keymap: default
+          controller: stemcell
+          output-dir: build-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: draculad-default-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  draculad-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: draculad
+          keymap: vial
+          output-dir: build-output
+          local-keymap-path: draculad/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: draculad-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  draculad-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: draculad
+          keymap: vial
+          controller: stemcell
+          output-dir: build-output
+          local-keymap-path: draculad/keymaps/vial
+      - uses: actions/upload-artifact@v4
+        with:
+          name: draculad-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   draculad-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -101,6 +177,10 @@ jobs:
       - draculad-default-svlinky
       - draculad-vial-helios
       - draculad-vial-svlinky
+      - draculad-default-promicro
+      - draculad-default-stemcell
+      - draculad-vial-promicro
+      - draculad-vial-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write

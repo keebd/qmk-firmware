@@ -95,6 +95,84 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  keebd-fourier-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: keebd_fourier
+          keymap: default
+          output-dir: build-output
+          local-keyboard-path: keebd_fourier
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keebd-fourier-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  keebd-fourier-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@main
+        with:
+          keyboard: keebd_fourier
+          keymap: default
+          controller: stemcell
+          output-dir: build-output
+          local-keyboard-path: keebd_fourier
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keebd-fourier-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  keebd-fourier-vial-promicro:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: keebd_fourier
+          keymap: vial
+          output-dir: build-output
+          local-keyboard-path: keebd_fourier
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keebd-fourier-vial-promicro
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  keebd-fourier-vial-stemcell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: keebd_fourier
+          keymap: vial
+          controller: stemcell
+          output-dir: build-output
+          local-keyboard-path: keebd_fourier
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keebd-fourier-vial-stemcell
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   keebd_fourier-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -103,6 +181,10 @@ jobs:
       - keebd-fourier-svlinky
       - keebd-fourier-vial-helios
       - keebd-fourier-vial-svlinky
+      - keebd-fourier-promicro
+      - keebd-fourier-stemcell
+      - keebd-fourier-vial-promicro
+      - keebd-fourier-vial-stemcell
     runs-on: ubuntu-latest
     permissions:
       contents: write
