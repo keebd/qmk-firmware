@@ -35,26 +35,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  sofle-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: sofle
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keymap-path: sofle/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sofle-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   sofle-vial-helios:
     runs-on: ubuntu-latest
     steps:
@@ -95,26 +75,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  sofle-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: sofle
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keymap-path: sofle/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sofle-via-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   sofle-vial-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -140,10 +100,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - sofle-default-helios
-      - sofle-via-helios
       - sofle-vial-helios
       - sofle-default-svlinky
-      - sofle-via-svlinky
       - sofle-vial-svlinky
     runs-on: ubuntu-latest
     permissions:

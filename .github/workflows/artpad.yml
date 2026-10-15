@@ -35,26 +35,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  artpad-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: artpad
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keyboard-path: artpad
-      - uses: actions/upload-artifact@v4
-        with:
-          name: artpad-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   artpad-vial-helios:
     runs-on: ubuntu-latest
     steps:
@@ -115,26 +95,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  artpad-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: artpad
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keyboard-path: artpad
-      - uses: actions/upload-artifact@v4
-        with:
-          name: artpad-via-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   artpad-vial-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -160,11 +120,9 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - artpad-default-helios
-      - artpad-via-helios
       - artpad-vial-helios
       - artpad-vial-keebd-helios
       - artpad-default-svlinky
-      - artpad-via-svlinky
       - artpad-vial-svlinky
     runs-on: ubuntu-latest
     permissions:

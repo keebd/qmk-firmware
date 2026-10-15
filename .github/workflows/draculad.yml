@@ -34,26 +34,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  draculad-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: draculad
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keymap-path: draculad/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: draculad-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   draculad-default-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -67,26 +47,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: draculad-default-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
-  draculad-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: draculad
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keymap-path: draculad/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: draculad-via-svlinky
           path: |
             build-output/*.uf2
             build-output/*.hex
@@ -138,9 +98,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - draculad-default-helios
-      - draculad-via-helios
       - draculad-default-svlinky
-      - draculad-via-svlinky
       - draculad-vial-helios
       - draculad-vial-svlinky
     runs-on: ubuntu-latest

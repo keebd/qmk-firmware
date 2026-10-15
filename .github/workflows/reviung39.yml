@@ -34,26 +34,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  reviung39-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: reviung/reviung39
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keymap-path: reviung39/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: reviung39-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   reviung39-vial-helios:
     runs-on: ubuntu-latest
     steps:
@@ -92,26 +72,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  reviung39-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: reviung/reviung39
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keymap-path: reviung39/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: reviung39-via-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   reviung39-vial-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -136,10 +96,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - reviung39-default-helios
-      - reviung39-via-helios
       - reviung39-vial-helios
       - reviung39-default-svlinky
-      - reviung39-via-svlinky
       - reviung39-vial-svlinky
     runs-on: ubuntu-latest
     permissions:

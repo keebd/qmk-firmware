@@ -34,26 +34,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  sofle_choc-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: sofle_choc
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keymap-path: sofle_choc/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sofle_choc-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   sofle_choc-vial-helios:
     runs-on: ubuntu-latest
     steps:
@@ -92,26 +72,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  sofle_choc-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: sofle_choc
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keymap-path: sofle_choc/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sofle_choc-via-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   sofle_choc-vial-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -136,10 +96,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - sofle_choc-default-helios
-      - sofle_choc-via-helios
       - sofle_choc-vial-helios
       - sofle_choc-default-svlinky
-      - sofle_choc-via-svlinky
       - sofle_choc-vial-svlinky
     runs-on: ubuntu-latest
     permissions:

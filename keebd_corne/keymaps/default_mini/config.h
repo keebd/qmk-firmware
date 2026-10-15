@@ -32,6 +32,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define TAPPING_TERM 100
 
 #ifdef RGBLIGHT_ENABLE
+// Corne Mini: the snapped-off outer column's 3 LEDs end each half's chain,
+// leaving 24 per side (keyboard.json defaults to 27 + 27).
+#    undef RGBLIGHT_LED_COUNT
+#    define RGBLIGHT_LED_COUNT 48
+#    undef RGBLED_SPLIT
+#    define RGBLED_SPLIT { 24, 24 }
     #define RGBLIGHT_EFFECT_BREATHING
     #define RGBLIGHT_EFFECT_RAINBOW_MOOD
     #define RGBLIGHT_EFFECT_RAINBOW_SWIRL

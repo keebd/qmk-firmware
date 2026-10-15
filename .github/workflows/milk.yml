@@ -34,26 +34,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  milk-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: spaceman/2_milk
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keymap-path: milk/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: milk-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   milk-vial-helios:
     runs-on: ubuntu-latest
     steps:
@@ -92,26 +72,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  milk-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: spaceman/2_milk
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keymap-path: milk/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: milk-via-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   milk-vial-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -136,10 +96,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - milk-default-helios
-      - milk-via-helios
       - milk-vial-helios
       - milk-default-svlinky
-      - milk-via-svlinky
       - milk-vial-svlinky
     runs-on: ubuntu-latest
     permissions:
