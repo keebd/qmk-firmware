@@ -14,11 +14,18 @@ on:
     - .github/workflows/dumbpad_oled.yml
     - dumbpad_oled/**
 
+# Least privilege: build jobs only read the repo; each release job grants
+# itself contents: write.
+permissions:
+  contents: read
+
 jobs:
   dumbpad_oled-default-helios:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@main
         with:
           keyboard: dumbpad/v1x_oled
@@ -38,6 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@main
         with:
           keyboard: dumbpad/v1x_oled
@@ -57,6 +66,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@vial-qmk
         with:
           keyboard: dumbpad/v1x_oled
@@ -77,6 +88,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@vial-qmk
         with:
           keyboard: dumbpad/v1x_oled
@@ -97,6 +110,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@main
         with:
           keyboard: dumbpad/v1x_oled
@@ -115,6 +130,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@main
         with:
           keyboard: dumbpad/v1x_oled
@@ -134,6 +151,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@vial-qmk
         with:
           keyboard: dumbpad/v1x_oled
@@ -153,6 +172,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@vial-qmk
         with:
           keyboard: dumbpad/v1x_oled

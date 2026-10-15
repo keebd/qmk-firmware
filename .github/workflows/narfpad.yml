@@ -14,11 +14,18 @@ on:
     - .github/workflows/narfpad.yml
     - narfpad/**
 
+# Least privilege: build jobs only read the repo; each release job grants
+# itself contents: write.
+permissions:
+  contents: read
+
 jobs:
   narfpad-default:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@main
         with:
           keyboard: narfpad
@@ -37,6 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: keebd/build-qmk-fw@vial-qmk
         with:
           keyboard: narfpad
