@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/sofle_choc.yml
     - sofle_choc/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/sofle_choc.yml
+    - sofle_choc/**
 
 jobs:
   sofle_choc-default-helios:
@@ -127,6 +132,8 @@ jobs:
           if-no-files-found: error
 
   sofle_choc-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - sofle_choc-default-helios
       - sofle_choc-via-helios

@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/pee_two.yml
     - pee_two/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/pee_two.yml
+    - pee_two/**
 
 jobs:
   pee-two-default-helios:
@@ -131,6 +136,8 @@ jobs:
           if-no-files-found: error
 
   pee_two-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - pee-two-default-helios
       - pee-two-via-helios

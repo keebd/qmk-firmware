@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/modelh.yml
     - modelh/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/modelh.yml
+    - modelh/**
 
 jobs:
   modelh-default:
@@ -66,6 +71,8 @@ jobs:
           if-no-files-found: error
 
   modelh-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - modelh-default
       - modelh-via

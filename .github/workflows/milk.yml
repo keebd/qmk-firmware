@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/milk.yml
     - milk/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/milk.yml
+    - milk/**
 
 jobs:
   milk-default-helios:
@@ -127,6 +132,8 @@ jobs:
           if-no-files-found: error
 
   milk-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - milk-default-helios
       - milk-via-helios

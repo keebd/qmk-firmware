@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/corne.yml
     - corne/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/corne.yml
+    - corne/**
 
 jobs:
   corne-default-helios:
@@ -127,6 +132,8 @@ jobs:
           if-no-files-found: error
 
   corne-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - corne-default-helios
       - corne-via-helios
