@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/cantor.yml
     - cantor/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/cantor.yml
+    - cantor/**
 
 jobs:
   cantor-default:
@@ -29,6 +34,8 @@ jobs:
           if-no-files-found: error
 
   cantor-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - cantor-default
     runs-on: ubuntu-latest

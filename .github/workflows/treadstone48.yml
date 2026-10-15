@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/treadstone48.yml
     - treadstone48/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/treadstone48.yml
+    - treadstone48/**
 
 jobs:
   treadstone48-default-helios:
@@ -93,6 +98,8 @@ jobs:
           if-no-files-found: error
 
   treadstone48-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - treadstone48-default-helios
       - treadstone48-via-helios

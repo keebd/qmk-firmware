@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/contra.yml
     - contra/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/contra.yml
+    - contra/**
 
 jobs:
   contra-default-helios:
@@ -127,6 +132,8 @@ jobs:
           if-no-files-found: error
 
   contra-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - contra-default-helios
       - contra-via-helios

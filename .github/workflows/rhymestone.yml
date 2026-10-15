@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/rhymestone.yml
     - rhymestone/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/rhymestone.yml
+    - rhymestone/**
 
 jobs:
   rhymestone-default-helios:
@@ -89,6 +94,8 @@ jobs:
           if-no-files-found: error
 
   rhymestone-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - rhymestone-default-helios
       - rhymestone-via-helios

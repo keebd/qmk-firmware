@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/eternal_keypad.yml
     - eternal_keypad/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/eternal_keypad.yml
+    - eternal_keypad/**
 
 jobs:
   eternal_keypad-default-helios:
@@ -93,6 +98,8 @@ jobs:
           if-no-files-found: error
 
   eternal_keypad-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - eternal_keypad-default-helios
       - eternal_keypad-via-helios

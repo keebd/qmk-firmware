@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/chocv.yml
     - chocv/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/chocv.yml
+    - chocv/**
 
 jobs:
   chocv-default-helios:
@@ -93,6 +98,8 @@ jobs:
           if-no-files-found: error
 
   chocv-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - chocv-default-helios
       - chocv-via-helios

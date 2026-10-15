@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/paintbrush.yml
     - paintbrush/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/paintbrush.yml
+    - paintbrush/**
 
 jobs:
   paintbrush-left-helios:
@@ -91,6 +96,8 @@ jobs:
           if-no-files-found: error
 
   paintbrush-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - paintbrush-left-helios
       - paintbrush-right-helios

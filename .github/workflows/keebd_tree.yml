@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/keebd_tree.yml
     - keebd_tree/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/keebd_tree.yml
+    - keebd_tree/**
 
 jobs:
   keebd-tree-helios:
@@ -91,6 +96,8 @@ jobs:
           if-no-files-found: error
 
   keebd_tree-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - keebd-tree-helios
       - keebd-tree-via-helios

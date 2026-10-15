@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/ergodash_mini.yml
     - ergodash_mini/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/ergodash_mini.yml
+    - ergodash_mini/**
 
 jobs:
   ergodash_mini-default-helios:
@@ -89,6 +94,8 @@ jobs:
           if-no-files-found: error
 
   ergodash_mini-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - ergodash_mini-default-helios
       - ergodash_mini-via-helios

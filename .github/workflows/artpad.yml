@@ -8,6 +8,11 @@ on:
     paths:
     - .github/workflows/artpad.yml
     - artpad/**
+  # PRs build (and upload artifacts for test flashing) but never publish.
+  pull_request:
+    paths:
+    - .github/workflows/artpad.yml
+    - artpad/**
 
 jobs:
   artpad-default-helios:
@@ -151,6 +156,8 @@ jobs:
           if-no-files-found: error
 
   artpad-release:
+    # Publish only from main; PR / branch runs just keep the build artifacts.
+    if: github.ref == 'refs/heads/main'
     needs:
       - artpad-default-helios
       - artpad-via-helios
