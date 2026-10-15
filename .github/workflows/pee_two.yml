@@ -35,26 +35,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  pee-two-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: pee_two
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keyboard-path: pee_two
-      - uses: actions/upload-artifact@v4
-        with:
-          name: pee-two-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   pee-two-vial-helios:
     runs-on: ubuntu-latest
     steps:
@@ -95,26 +75,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  pee-two-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: pee_two
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keyboard-path: pee_two
-      - uses: actions/upload-artifact@v4
-        with:
-          name: pee-two-via-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   pee-two-vial-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -140,10 +100,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - pee-two-default-helios
-      - pee-two-via-helios
       - pee-two-vial-helios
       - pee-two-default-svlinky
-      - pee-two-via-svlinky
       - pee-two-vial-svlinky
     runs-on: ubuntu-latest
     permissions:

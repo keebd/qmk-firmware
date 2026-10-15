@@ -33,25 +33,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  lumberjack-via:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: peej/lumberjack
-          keymap: via
-          output-dir: build-output
-          local-keymap-path: lumberjack/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: lumberjack-via
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   lumberjack-vial:
     runs-on: ubuntu-latest
     steps:
@@ -75,7 +56,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - lumberjack-default
-      - lumberjack-via
       - lumberjack-vial
     runs-on: ubuntu-latest
     permissions:

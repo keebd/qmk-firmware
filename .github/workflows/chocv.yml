@@ -35,27 +35,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  chocv-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: chocv
-          keymap: via
-          controller: helios
-          pin-compatible: promicro
-          output-dir: build-output
-          local-keymap-path: chocv/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: chocv-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   chocv-default-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -70,27 +49,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: chocv-default-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
-  chocv-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: chocv
-          keymap: via
-          controller: svlinky
-          pin-compatible: promicro
-          output-dir: build-output
-          local-keymap-path: chocv/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: chocv-via-svlinky
           path: |
             build-output/*.uf2
             build-output/*.hex
@@ -144,9 +102,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - chocv-default-helios
-      - chocv-via-helios
       - chocv-default-svlinky
-      - chocv-via-svlinky
       - chocv-vial-helios
       - chocv-vial-svlinky
     runs-on: ubuntu-latest

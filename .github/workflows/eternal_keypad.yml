@@ -35,27 +35,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  eternal_keypad-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: eternal_keypad
-          keymap: via
-          controller: helios
-          pin-compatible: promicro
-          output-dir: build-output
-          local-keymap-path: eternal_keypad/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: eternal_keypad-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   eternal_keypad-default-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -70,27 +49,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: eternal_keypad-default-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
-  eternal_keypad-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: eternal_keypad
-          keymap: via
-          controller: svlinky
-          pin-compatible: promicro
-          output-dir: build-output
-          local-keymap-path: eternal_keypad/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: eternal_keypad-via-svlinky
           path: |
             build-output/*.uf2
             build-output/*.hex
@@ -144,9 +102,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - eternal_keypad-default-helios
-      - eternal_keypad-via-helios
       - eternal_keypad-default-svlinky
-      - eternal_keypad-via-svlinky
       - eternal_keypad-vial-helios
       - eternal_keypad-vial-svlinky
     runs-on: ubuntu-latest

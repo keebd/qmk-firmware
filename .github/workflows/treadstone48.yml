@@ -35,27 +35,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  treadstone48-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: marksard/treadstone48
-          keymap: via
-          controller: helios
-          pin-compatible: promicro
-          output-dir: build-output
-          local-keymap-path: treadstone48/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: treadstone48-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   treadstone48-default-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -70,27 +49,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: treadstone48-default-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
-  treadstone48-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: marksard/treadstone48
-          keymap: via
-          controller: svlinky
-          pin-compatible: promicro
-          output-dir: build-output
-          local-keymap-path: treadstone48/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: treadstone48-via-svlinky
           path: |
             build-output/*.uf2
             build-output/*.hex
@@ -144,9 +102,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - treadstone48-default-helios
-      - treadstone48-via-helios
       - treadstone48-default-svlinky
-      - treadstone48-via-svlinky
       - treadstone48-vial-helios
       - treadstone48-vial-svlinky
     runs-on: ubuntu-latest

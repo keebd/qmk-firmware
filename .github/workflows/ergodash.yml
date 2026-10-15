@@ -34,26 +34,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  ergodash-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: omkbd/ergodash/rev1
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keymap-path: ergodash/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ergodash-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   ergodash-vial-helios:
     runs-on: ubuntu-latest
     steps:
@@ -92,26 +72,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  ergodash-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: omkbd/ergodash/rev1
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keymap-path: ergodash/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ergodash-via-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   ergodash-vial-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -136,10 +96,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - ergodash-default-helios
-      - ergodash-via-helios
       - ergodash-vial-helios
       - ergodash-default-svlinky
-      - ergodash-via-svlinky
       - ergodash-vial-svlinky
     runs-on: ubuntu-latest
     permissions:

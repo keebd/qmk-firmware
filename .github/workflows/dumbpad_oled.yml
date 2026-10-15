@@ -34,26 +34,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  dumbpad_oled-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: dumbpad/v1x_oled
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keymap-path: dumbpad_oled/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dumbpad_oled-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   dumbpad_oled-default-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -67,26 +47,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: dumbpad_oled-default-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
-  dumbpad_oled-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: dumbpad/v1x_oled
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keymap-path: dumbpad_oled/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dumbpad_oled-via-svlinky
           path: |
             build-output/*.uf2
             build-output/*.hex
@@ -138,9 +98,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - dumbpad_oled-default-helios
-      - dumbpad_oled-via-helios
       - dumbpad_oled-default-svlinky
-      - dumbpad_oled-via-svlinky
       - dumbpad_oled-vial-helios
       - dumbpad_oled-vial-svlinky
     runs-on: ubuntu-latest

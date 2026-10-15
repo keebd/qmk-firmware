@@ -34,26 +34,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  ergodash_mini-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: omkbd/ergodash/mini
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keymap-path: ergodash_mini/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ergodash_mini-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   ergodash_mini-default-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -67,26 +47,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ergodash_mini-default-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
-  ergodash_mini-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: omkbd/ergodash/mini
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keymap-path: ergodash_mini/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ergodash_mini-via-svlinky
           path: |
             build-output/*.uf2
             build-output/*.hex
@@ -138,9 +98,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - ergodash_mini-default-helios
-      - ergodash_mini-via-helios
       - ergodash_mini-default-svlinky
-      - ergodash_mini-via-svlinky
       - ergodash_mini-vial-helios
       - ergodash_mini-vial-svlinky
     runs-on: ubuntu-latest

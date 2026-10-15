@@ -34,26 +34,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  rhymestone-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: marksard/rhymestone
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keymap-path: rhymestone/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: rhymestone-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   rhymestone-default-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -67,26 +47,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: rhymestone-default-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
-  rhymestone-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: marksard/rhymestone
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keymap-path: rhymestone/keymaps/via
-      - uses: actions/upload-artifact@v4
-        with:
-          name: rhymestone-via-svlinky
           path: |
             build-output/*.uf2
             build-output/*.hex
@@ -138,9 +98,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - rhymestone-default-helios
-      - rhymestone-via-helios
       - rhymestone-default-svlinky
-      - rhymestone-via-svlinky
       - rhymestone-vial-helios
       - rhymestone-vial-svlinky
     runs-on: ubuntu-latest

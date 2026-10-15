@@ -35,26 +35,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  keebd-tree-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: keebd_tree
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keyboard-path: keebd_tree
-      - uses: actions/upload-artifact@v4
-        with:
-          name: keebd-tree-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   keebd-tree-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -69,26 +49,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: keebd-tree-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
-  keebd-tree-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: keebd_tree
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keyboard-path: keebd_tree
-      - uses: actions/upload-artifact@v4
-        with:
-          name: keebd-tree-via-svlinky
           path: |
             build-output/*.uf2
             build-output/*.hex
@@ -140,9 +100,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - keebd-tree-helios
-      - keebd-tree-via-helios
       - keebd-tree-svlinky
-      - keebd-tree-via-svlinky
       - keebd-tree-vial-helios
       - keebd-tree-vial-svlinky
     runs-on: ubuntu-latest

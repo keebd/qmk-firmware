@@ -35,26 +35,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  keebd-corne-via-helios:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: keebd_corne_lp
-          keymap: via
-          controller: helios
-          output-dir: build-output
-          local-keyboard-path: keebd_corne_lp
-      - uses: actions/upload-artifact@v4
-        with:
-          name: keebd-corne-via-helios
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   keebd-corne-vial-helios:
     runs-on: ubuntu-latest
     steps:
@@ -95,26 +75,6 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
-  keebd-corne-via-svlinky:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: keebd/build-qmk-fw@main
-        with:
-          keyboard: keebd_corne_lp
-          keymap: via
-          controller: svlinky
-          output-dir: build-output
-          local-keyboard-path: keebd_corne_lp
-      - uses: actions/upload-artifact@v4
-        with:
-          name: keebd-corne-via-svlinky
-          path: |
-            build-output/*.uf2
-            build-output/*.hex
-            build-output/*.bin
-          if-no-files-found: error
-
   keebd-corne-vial-svlinky:
     runs-on: ubuntu-latest
     steps:
@@ -140,10 +100,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs:
       - keebd-corne-default-helios
-      - keebd-corne-via-helios
       - keebd-corne-vial-helios
       - keebd-corne-default-svlinky
-      - keebd-corne-via-svlinky
       - keebd-corne-vial-svlinky
     runs-on: ubuntu-latest
     permissions:
