@@ -135,6 +135,46 @@ jobs:
             build-output/*.bin
           if-no-files-found: error
 
+  keebd-corne-vial-mini-helios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: keebd_corne
+          keymap: vial_mini
+          controller: helios
+          output-dir: build-output
+          local-keyboard-path: keebd_corne
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keebd-corne-vial-mini-helios
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
+  keebd-corne-vial-mini-svlinky:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: keebd/build-qmk-fw@vial-qmk
+        with:
+          keyboard: keebd_corne
+          keymap: vial_mini
+          controller: svlinky
+          output-dir: build-output
+          local-keyboard-path: keebd_corne
+      - uses: actions/upload-artifact@v4
+        with:
+          name: keebd-corne-vial-mini-svlinky
+          path: |
+            build-output/*.uf2
+            build-output/*.hex
+            build-output/*.bin
+          if-no-files-found: error
+
   keebd_corne-release:
     # Publish only from main; PR / branch runs just keep the build artifacts.
     if: github.ref == 'refs/heads/main'
@@ -145,6 +185,8 @@ jobs:
       - keebd-corne-default-svlinky
       - keebd-corne-via-svlinky
       - keebd-corne-vial-svlinky
+      - keebd-corne-vial-mini-helios
+      - keebd-corne-vial-mini-svlinky
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -164,6 +206,7 @@ jobs:
             Latest KEEBD Corne Firmware, built automatically from `main`.
 
             Download the firmware matching your keymap and controller, then flash it.
+            `vial_mini` is for the 3x5 Corne MX Mini (outer columns snapped off).
           files: |
             firmware/*.uf2
             firmware/*.hex
