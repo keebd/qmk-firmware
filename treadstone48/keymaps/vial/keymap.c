@@ -26,13 +26,16 @@ enum layer_number {
   _ADJUST,
 };
 
+// Vial shows these by name via customKeycodes in vial.json (which start at QK_KB_0).
 enum custom_keycodes {
-  LOWER = SAFE_RANGE,
-  RAISE,
-  ADJUST,
-  KANJI,
+  KANJI = QK_KB_0,
   RGBRST
 };
+
+// Built-in momentary layers so Vial shows them as normal layer keys; Adjust is
+// the tri-layer of Lower + Raise (see layer_state_set_user).
+#define LOWER MO(_LOWER)
+#define RAISE MO(_RAISE)
 
 #define KC_TBSF  LSFT_T(KC_TAB)
 #define KC_ALAP  LALT_T(KC_APP)
@@ -243,3 +246,38 @@ bool oled_task_user(void) {
 }
 
 #endif
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+}
+
+// Restored from the upstream marksard keymap (it was lost when the OLED helpers
+// were inlined, leaving KANJI/RGBRST and the OLED key log dead).
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef OLED_ENABLE
+  update_key_status(keycode, record);
+#endif
+
+  switch (keycode) {
+    case KANJI:
+      if (record->event.pressed) {
+        if (keymap_config.swap_lalt_lgui == false) {
+          register_code(KC_LNG2);
+        } else {
+          SEND_STRING(SS_LALT("`"));
+        }
+      } else {
+        unregister_code(KC_LNG2);
+      }
+      return false;
+#ifdef RGBLIGHT_ENABLE
+    case RGBRST:
+      if (record->event.pressed) {
+        eeconfig_update_rgblight_default();
+        rgblight_enable();
+      }
+      return false;
+#endif
+  }
+  return true;
+}

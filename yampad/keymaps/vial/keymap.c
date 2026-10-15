@@ -34,8 +34,9 @@ enum layers {
     _FN
 };
 
+// Vial shows this by name via customKeycodes in vial.json (which start at QK_KB_0).
 enum custom_keycodes {
-    KC_DBL0 = SAFE_RANGE,
+    KC_DBL0 = QK_KB_0,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {

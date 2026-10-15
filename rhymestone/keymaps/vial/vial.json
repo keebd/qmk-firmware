@@ -3,6 +3,10 @@
     "vendorId": "0xFEED",
     "productId": "0xDFA1",
     "lighting": "qmk_rgblight",
+    "customKeycodes": [
+        {"name": "KANJI", "title": "Kanji / IME toggle (LNG2, or Alt+` when Alt/GUI are swapped)", "shortName": "Kanji"},
+        {"name": "RGBRST", "title": "Reset RGB lighting to defaults", "shortName": "RGB Rst"}
+    ],
     "matrix": { "rows": 8, "cols": 5 },
     "layouts": {
         "keymap": [

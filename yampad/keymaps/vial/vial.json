@@ -3,6 +3,9 @@
     "vendorId": "0x5950",
     "productId": "0x8369",
     "lighting": "qmk_rgblight",
+    "customKeycodes": [
+        {"name": "KC_DBL0", "title": "Type 00", "shortName": "00"}
+    ],
     "matrix": { "rows": 5, "cols": 4 },
     "layouts": {
         "keymap": [
