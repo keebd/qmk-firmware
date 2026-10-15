@@ -278,13 +278,20 @@ jobs:
           body: |
             Latest Lily58 QMK firmware, built automatically from `main`.
 
-            The **VIA** and **Vial** variants now include rotary-encoder support
-            for the Lily58 RE. The same firmware also works on the standard
-            all-switch Lily58 (the encoder pins simply idle), so there is no
-            separate download.
+            The **Vial** variants include rotary-encoder support for the
+            Lily58 RE. The same firmware also works on the standard all-switch
+            Lily58 (the encoder pins simply idle), so there is no separate
+            download.
 
-            Variants: `default`, `via`, `vial`, `vial-keebd`, `vik` — each built
-            for the **Helios** and **SVLinky** controllers.
+            Variants and controllers:
+            - `default`, `vial`: **Helios**, **SVLinky**, **StemCell** (`.uf2`)
+              and classic **Pro Micro** (`.hex`)
+            - `vial-keebd`: **Helios**, **StemCell** (`.uf2`) and classic
+              **Pro Micro** (`.hex`)
+            - `vik`: **SVLinky** only
+
+            Pro Micro Vial builds have some Vial extras (e.g. QMK Settings,
+            tap dance, combos) turned off to fit the ATmega32U4.
           files: |
             firmware/*.uf2
             firmware/*.hex
